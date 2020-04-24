@@ -26,6 +26,7 @@ public abstract class Evaluator {
 
 	private Random r = new Random();
 
+	ArrayList<Network> networks = new ArrayList<>();
 	ArrayList<Genome> genomes;
 	ArrayList<Genome> nextGenomes;
 	ArrayList<Species> species;
@@ -59,9 +60,11 @@ public abstract class Evaluator {
 		nextGenomes.clear();
 		speciesMap.clear();
 		highestIndividual = 0;
+		networks.clear();
 		int newCounter = 0;
 		// put genomes in species
 		for (Genome g : genomes) {
+			networks.add(new Network(g));
 			boolean putInSpecies = false;
 			for (Species s : species) {
 				if (Genome.compatibilityDis(g, s.mascot, c1, c2, c3) < DM) {
@@ -96,9 +99,15 @@ public abstract class Evaluator {
 		// System.out.println("added: " + newCounter + " removed: "+counter +" "
 		// + Arrays.toString(removing.toArray()));
 
+		
+		//run round
+		runRound(networks);
+		
+		
 		// eval genomes and set fitnesses
-		for (Genome g : genomes) {
-			float fit = evalGenome(g);
+		for (Network n : networks) {
+			Genome g =n.getGenome();
+			float fit = evalGenomeInNetwork(n);
 			float adjustedFit = fit / speciesMap.get(g).members.size();
 			g.setFitness(adjustedFit);
 			Species s = speciesMap.get(g);
@@ -156,6 +165,8 @@ public abstract class Evaluator {
 		return fittestGenome;
 	}
 
-	abstract float evalGenome(Genome g);
+	abstract float evalGenomeInNetwork(Network n);
+	
+	abstract void runRound(ArrayList<Network> nets);
 
 }

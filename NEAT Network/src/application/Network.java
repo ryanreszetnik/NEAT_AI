@@ -7,6 +7,7 @@ public class Network {
 	Genome gene;
 	ArrayList<Node> inputs;
 	ArrayList<Node> outputs;
+	private float fitness;
 	public Network(Genome g){
 		gene = g;
 		for(Node n :g.getNodeGenes().values()){
@@ -16,6 +17,15 @@ public class Network {
 				outputs.add(n);
 			}
 		}
+	}
+	public Genome getGenome(){
+		return gene;
+	}
+	public float getFitness(){
+		return fitness;
+	}
+	public void setFitness(float fitness){
+		this.fitness=fitness;
 	}
 	public float[] run(float[] in){
 		if(in.length!=this.inputs.size()){

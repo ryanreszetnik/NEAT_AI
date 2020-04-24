@@ -1,5 +1,6 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import application.Node.TYPE;
@@ -21,14 +22,20 @@ public class TestEvaluator {
 //		System.out.println(gene.innovationGenerator.getInnovationNode());
 		Evaluator eval = new Evaluator(gene, 100, 1f, 1f, 0.4f, 2f, 0.5f, 0.1f, 0.1f){
 			@Override
-			protected float evalGenome(Genome g){
-				double sum = 0;
-				for(Connection c:g.getConnectionGenes().values()){
-					sum+=c.getWeight();
-				}
-//				System.out.println(sum);
-				return (float) (20/Math.abs(20-sum));
+			void runRound(ArrayList<Network> nets) {
+				// TODO Auto-generated method stub
+				//need to update fitness values for each network
 			}
+
+			@Override
+			float evalGenomeInNetwork(Network n) {
+				// TODO Auto-generated method stub
+				return n.getFitness();
+			}
+
+			
+
+			
 		};
 		for(int i = 0; i < 100; i++){
 			eval.evaluate();
