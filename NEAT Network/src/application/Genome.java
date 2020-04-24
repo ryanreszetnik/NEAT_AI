@@ -81,6 +81,13 @@ public class Genome {
 				c.setWeight(c.getWeight() * (r.nextFloat() * 4f - 2f));
 			}
 		}
+		for (Node n : nodes.values()) {
+			if (r.nextFloat() < weightRandomProbability) {
+				n.setBiasWeight(r.nextFloat() * 4f - 2f);
+			} else {
+				n.setBiasWeight(n.getBiasWeight() * (r.nextFloat() * 4f - 2f));
+			}
+		}
 
 	}
 
@@ -175,7 +182,7 @@ public class Genome {
 		int output = c.getOutputNode();
 		c.disable();
 		int innov = nodeCount.addToCount();
-		Node newNode = new Node(TYPE.HIDDEN, innov);
+		Node newNode = new Node(TYPE.HIDDEN, innov,r.nextFloat());
 		// System.out.println("Go to" + innov + "size: " + nodes.size() + " id1:
 		// " + input + " id2:" + newNode.getId()
 		// + " id3: " + output);

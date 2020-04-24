@@ -38,15 +38,16 @@ public class ShowGenome {
 	}
 
 	public static Genome Parent3(){
+		Random r = new Random();
 		Genome parent1 = new Genome();
 		for (int i = 0; i < 2; i++) {
-			parent1.addNodeGene(new Node(TYPE.INPUT, parent1.nodeCount.addToCount()));//1,2
+			parent1.addNodeGene(new Node(TYPE.INPUT, parent1.nodeCount.addToCount(),r.nextFloat()));//1,2
 		}
 		
-		parent1.addNodeGene(new Node(TYPE.HIDDEN,  parent1.nodeCount.addToCount()));//3
-		parent1.addNodeGene(new Node(TYPE.HIDDEN,  parent1.nodeCount.addToCount()));//4
-		parent1.addNodeGene(new Node(TYPE.HIDDEN,  parent1.nodeCount.addToCount()));//5
-		parent1.addNodeGene(new Node(TYPE.OUTPUT,  parent1.nodeCount.addToCount()));//6
+		parent1.addNodeGene(new Node(TYPE.HIDDEN,  parent1.nodeCount.addToCount(),r.nextFloat()));//3
+		parent1.addNodeGene(new Node(TYPE.HIDDEN,  parent1.nodeCount.addToCount(),r.nextFloat()));//4
+		parent1.addNodeGene(new Node(TYPE.HIDDEN,  parent1.nodeCount.addToCount(),r.nextFloat()));//5
+		parent1.addNodeGene(new Node(TYPE.OUTPUT,  parent1.nodeCount.addToCount(),r.nextFloat()));//6
 		parent1.addConnectionGene(new Connection(1, 3, 1f, true, parent1.connectionCount.addToCount()));
 		parent1.addConnectionGene(new Connection(2, 3, 1f, true,   parent1.connectionCount.addToCount()));
 		parent1.addConnectionGene(new Connection(3, 4, 1f, true,   parent1.connectionCount.addToCount()));
