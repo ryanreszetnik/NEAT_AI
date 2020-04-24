@@ -10,17 +10,50 @@ import java.util.Random;
 import application.Node.TYPE;
 
 public class Genome {
+
 	public static final float weightRandomProbability = 0.1f;
 	public static ArrayList<Integer> firstInnNums = new ArrayList<>();
 	public static ArrayList<Integer> secondInnNums = new ArrayList<>();
-	public static HashMap<Integer, Connection> allConnections = new HashMap<>();
+	// public static HashMap<Integer, Connection> allConnections = new
+	// HashMap<>();
 
+	public Counter connectionCount;
+	public Counter nodeCount;
+	// public Innovation innovationGenerator;
+	private float fitness = 0;
 	private HashMap<Integer, Node> nodes;
 	private HashMap<Integer, Connection> connections;
 
 	public Genome() {
-		nodes = new HashMap<>();
+		nodes = new HashMap<Integer, Node>();
 		connections = new HashMap<>();
+		// innovationGenerator = new Innovation();
+		connectionCount = new Counter();
+		nodeCount = new Counter();
+	}
+
+	public Genome(Genome origional) {
+		nodes = new HashMap<Integer, Node>();
+		connections = new HashMap<>();
+		for (Integer n : origional.nodes.keySet()) {
+			nodes.put(n, origional.nodes.get(n).copy());
+		}
+		for (Integer c : origional.connections.keySet()) {
+			connections.put(c, origional.connections.get(c).copy());
+		}
+		connectionCount = new Counter(origional.connectionCount.count);
+		nodeCount = new Counter(origional.nodeCount.count);
+		// System.out.println("New Genome: "+connectionCount.count + "
+		// "+nodeCount.count);
+		// innovationGenerator = origional.innovationGenerator.copy();
+	}
+
+	public float getFitness() {
+		return fitness;
+	}
+
+	public void setFitness(float fit) {
+		fitness = fit;
 	}
 
 	public HashMap<Integer, Connection> getConnectionGenes() {
@@ -37,7 +70,7 @@ public class Genome {
 
 	public void addConnectionGene(Connection gene) {
 		connections.put(gene.getInnovation(), gene);
-		allConnections.put(gene.getInnovation(), gene);
+		// allConnections.put(gene.getInnovation(), gene);
 	}
 
 	public void mutateWeights(Random r) {
@@ -54,8 +87,13 @@ public class Genome {
 	public void newRandConnection(Random r, int maxAttempts) {
 
 		for (int i = 0; i < maxAttempts; i++) {
-			Node a = nodes.get(r.nextInt(nodes.size()));
-			Node b = nodes.get(r.nextInt(nodes.size()));
+			int temp = r.nextInt(nodes.size() - 1) + 1;
+			int temp2 = r.nextInt(nodes.size() - 1) + 1;
+			Node a = nodes.get(temp);
+			Node b = nodes.get(temp2);
+
+			// System.out.println(a+ " connect to " +b +" from " + temp + " and
+			// "+ temp2 +" within "+nodes.size() );
 			float weight = r.nextFloat() * 2f - 1f;
 			// a --> b
 			boolean bad = false;
@@ -72,24 +110,23 @@ public class Genome {
 			} else if (a.getType() == Node.TYPE.OUTPUT && b.getType() == Node.TYPE.OUTPUT) {
 				// bad
 				bad = true;
-			} else if (a.getType() == Node.TYPE.HIDDEN && b.getType() == Node.TYPE.HIDDEN) {
-				// possibly needs to be reversed if a is in the future of b
-				if (Node.futureNodes(connections, b.getId()).contains(a.getId())) {
-					flipped = true;
-				}
-			}
-
+			} /*
+				 * else if (a.getType() == Node.TYPE.HIDDEN && b.getType() ==
+				 * Node.TYPE.HIDDEN) { // possibly needs to be reversed if a is
+				 * in the future of b if (Node.futureNodes(connections,
+				 * b.getId()).contains(a.getId())) { flipped = true; } }
+				 */
 			if (ConnectionExists(a.getId(), b.getId(), connections) == -1 && !bad) {
-				int inn = Innovation.getInnovationConnection(a.getId(), b.getId());
+				int inn = connectionCount.addToCount();
 				// add connection
 				Connection c = new Connection(flipped ? b.getId() : a.getId(), flipped ? a.getId() : b.getId(), weight,
 						true, inn);
 				connections.put(inn, c);
-				allConnections.put(inn, c);
+				// allConnections.put(inn, c);
 				return;
 			}
 		}
-		System.out.println("Could not make new connection");
+		// System.out.println("Could not make new connection");
 
 	}
 
@@ -110,18 +147,19 @@ public class Genome {
 		int input = c.getInputNode();
 		int output = c.getOutputNode();
 		c.disable();
-		int innov = Innovation.getInnovationNode();
+		int innov = nodeCount.addToCount();
 		Node newNode = new Node(TYPE.HIDDEN, innov);
-		Connection in = new Connection(input, newNode.getId(), 1, true,
-				Innovation.getInnovationConnection(input, newNode.getId()));
-		Connection out = new Connection(newNode.getId(), output, c.getWeight(), true,
-				Innovation.getInnovationConnection(newNode.getId(), output));
+		// System.out.println("Go to" + innov + "size: " + nodes.size() + " id1:
+		// " + input + " id2:" + newNode.getId()
+		// + " id3: " + output);
+		Connection in = new Connection(input, newNode.getId(), 1, true, connectionCount.addToCount());
+		Connection out = new Connection(newNode.getId(), output, c.getWeight(), true, connectionCount.addToCount());
 		connections.put(in.getInnovation(), in);
 		connections.put(out.getInnovation(), out);
 		nodes.put(innov, newNode);
-		allConnections.put(in.getInnovation(), in);
-		allConnections.put(out.getInnovation(), out);
-
+		// System.out.println(connections.size());
+		// allConnections.put(in.getInnovation(), in);
+		// allConnections.put(out.getInnovation(), out);
 	}
 
 	public int nodeExists(int input, int output, HashMap<Integer, Connection> connect) {
@@ -140,15 +178,19 @@ public class Genome {
 	}
 
 	public static Genome crossOver(Genome morefit, Genome lessFit, Random r) {
-		Genome child = new Genome();
-		for (Node n : morefit.nodes.values()) {
-			child.addNodeGene(n.copy());
-		}
+		Genome child = new Genome(morefit);
+
+		// for (Node n : morefit.nodes.values()) {
+		// child.addNodeGene(n.copy());
+		// }
+		child.connections.clear();
+		child.connectionCount.count = 0;
 
 		for (Connection cfit : morefit.connections.values()) {
 			if (lessFit.getConnectionGenes().containsKey(cfit.getInnovation())) {// genes
 																					// match
 																					// history
+				child.connectionCount.addToCount();
 				if (r.nextBoolean()) {
 					child.addConnectionGene(cfit.copy());
 				} else {
@@ -190,7 +232,7 @@ public class Genome {
 		return excess;
 	}
 
-	public static float compatibilityDis(Genome g1, Genome g2, int c1, int c2, int c3) {
+	public static float compatibilityDis(Genome g1, Genome g2, float c1, float c2, float c3) {
 		int disjoint = 0;
 		int excess = 0;
 		int matching = 0;
@@ -227,6 +269,7 @@ public class Genome {
 				matching++;
 				weightDiff += Math
 						.abs(g1.getConnectionGenes().get(i).getWeight() - g2.getConnectionGenes().get(i).getWeight());
+//				System.out.println("Checking: " + g1.getConnectionGenes().get(i).getWeight() +" vs "+ g2.getConnectionGenes().get(i).getWeight() );
 			} else if (!firstInnNums.contains(i) && maxInn1 > i && secondInnNums.contains(i)) {
 				disjoint++;
 			} else if (!secondInnNums.contains(i) && maxInn2 > i && firstInnNums.contains(i)) {
@@ -237,9 +280,12 @@ public class Genome {
 				excess++;
 			}
 		}
+		float temp = weightDiff;
 		weightDiff /= matching;
-		System.out.println("Excess:" + excess + " Disjoint: " + disjoint + " Matching Connec: " + matching
-				+ " Avg Weight Diff: " + weightDiff);
+		double output = excess * c1 / numOfGenes + disjoint * c2 / numOfGenes + c3 * weightDiff;
+		if (output > 2) {
+//			System.out.println("excess: " + excess + " dis: " + disjoint + " weightDiff: " + weightDiff + " matching: " +matching + "before " + temp);
+		}
 		return excess * c1 / numOfGenes + disjoint * c2 / numOfGenes + c3 * weightDiff;
 	}
 

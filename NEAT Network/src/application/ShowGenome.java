@@ -18,69 +18,69 @@ public class ShowGenome {
 	static Graphics2D gr = (Graphics2D) output.getGraphics();
 
 	public static void main(String[] args) {
-		Genome parent1 = Parent1();
-		Genome parent2 = Parent2();
+//		Genome parent1 = Parent1();
+//		Genome parent2 = Parent2();
 //		parent1.mutateWeights(new Random());
 //		show(parent1,"Parent1");
 //		show(parent2,"Parent2");
 		
 //		Genome child= Genome.crossOver(parent2,parent1, new Random());
 //		show(child,"Child");
-		System.out.println(Genome.compatibilityDis(parent1, parent2,1,1,1));
-//		parent1.addNodeMutation(new Random());
-		show(parent1,"Parent1");
-		show(parent2,"Parent2");
+//		System.out.println(Genome.compatibilityDis(parent1, parent2,1,1,1));
+////		parent1.addNodeMutation(new Random());
+//		show(parent1,"Parent1");
+//		show(parent2,"Parent2");
 	}
 
-	public static Genome Parent3(){
-		Genome parent1 = new Genome();
-		for (int i = 0; i < 2; i++) {
-			parent1.addNodeGene(new Node(TYPE.INPUT, Innovation.getInnovationNode()));
-		}
-		parent1.addNodeGene(new Node(TYPE.OUTPUT, Innovation.getInnovationNode()));
-		parent1.addConnectionGene(new Connection(1, 3, 1f, true, Innovation.getInnovationConnection(1, 3)));
-		parent1.addConnectionGene(new Connection(2, 3, 1f, true, Innovation.getInnovationConnection(2, 3)));
-		return parent1;
-	}
+//	public static Genome Parent3(){
+//		Genome parent1 = new Genome();
+//		for (int i = 0; i < 2; i++) {
+//			parent1.addNodeGene(new Node(TYPE.INPUT, parent1.innovationGenerator.getInnovationNode()));
+//		}
+//		parent1.addNodeGene(new Node(TYPE.OUTPUT,  parent1.innovationGenerator.getInnovationNode()));
+//		parent1.addConnectionGene(new Connection(1, 3, 1f, true,  parent1.innovationGenerator.getInnovationConnection(1, 3,gene.getConnectionGenes())));
+//		parent1.addConnectionGene(new Connection(2, 3, 1f, true,  parent1.innovationGenerator.getInnovationConnection(2, 3)));
+//		return parent1;
+//	}
 	
-	public static Genome Parent1() {
-		Genome parent1 = new Genome();
-		for (int i = 0; i < 3; i++) {
-			parent1.addNodeGene(new Node(TYPE.INPUT, Innovation.getInnovationNode()));
-		}
-		parent1.addNodeGene(new Node(TYPE.OUTPUT, Innovation.getInnovationNode()));
-		parent1.addNodeGene(new Node(TYPE.HIDDEN, Innovation.getInnovationNode()));
-
-		parent1.addConnectionGene(new Connection(1, 4, 1f, true, Innovation.getInnovationConnection(1, 4)));
-		parent1.addConnectionGene(new Connection(2, 4, 1f, false, Innovation.getInnovationConnection(2, 4)));
-		parent1.addConnectionGene(new Connection(3, 4, 1f, true, Innovation.getInnovationConnection(3, 4)));
-		parent1.addConnectionGene(new Connection(2, 5, 1f, true, Innovation.getInnovationConnection(2, 5)));
-		parent1.addConnectionGene(new Connection(5, 4, 1f, true, Innovation.getInnovationConnection(5, 4)));
-		parent1.addConnectionGene(new Connection(1, 5, 1f, true, Innovation.getInnovationConnection(1, 5)));
-		return parent1;
-
-	}
-	public static Genome Parent2(){
-		Genome parent2 = new Genome();
-		for (int i = 0; i < 3; i++) {
-			parent2.addNodeGene(new Node(TYPE.INPUT, i+1));
-		}
-		parent2.addNodeGene(new Node(TYPE.OUTPUT, 4));
-		parent2.addNodeGene(new Node(TYPE.HIDDEN, 5));
-		parent2.addNodeGene(new Node(TYPE.HIDDEN, Innovation.getInnovationNode()));
-
-		parent2.addConnectionGene(new Connection(1, 4, 1f, true, Innovation.getInnovationConnection(1, 4)));
-		parent2.addConnectionGene(new Connection(2, 4, 1f, false, Innovation.getInnovationConnection(2, 4)));
-		parent2.addConnectionGene(new Connection(3, 4, 1f, true, Innovation.getInnovationConnection(3, 4)));
-		parent2.addConnectionGene(new Connection(2, 5, 1f, true, Innovation.getInnovationConnection(2, 5)));
-		parent2.addConnectionGene(new Connection(5, 4, 1f, false, Innovation.getInnovationConnection(5, 4)));
-		parent2.addConnectionGene(new Connection(5, 6, 1f, true, Innovation.getInnovationConnection(5, 6)));
-		parent2.addConnectionGene(new Connection(6, 4, 1f, true, Innovation.getInnovationConnection(6, 4)));
-		parent2.addConnectionGene(new Connection(3, 5, 1f, true, Innovation.getInnovationConnection(3, 5)));
-		parent2.addConnectionGene(new Connection(1, 6, 1f, true, Innovation.getInnovationConnection(1, 6)));
-		return parent2;
-		
-	}
+//	public static Genome Parent1() {
+//		Genome parent1 = new Genome();
+//		for (int i = 0; i < 3; i++) {
+//			parent1.addNodeGene(new Node(TYPE.INPUT, Innovation.getInnovationNode()));
+//		}
+//		parent1.addNodeGene(new Node(TYPE.OUTPUT, Innovation.getInnovationNode()));
+//		parent1.addNodeGene(new Node(TYPE.HIDDEN, Innovation.getInnovationNode()));
+//
+//		parent1.addConnectionGene(new Connection(1, 4, 1f, true, Innovation.getInnovationConnection(1, 4)));
+//		parent1.addConnectionGene(new Connection(2, 4, 1f, false, Innovation.getInnovationConnection(2, 4)));
+//		parent1.addConnectionGene(new Connection(3, 4, 1f, true, Innovation.getInnovationConnection(3, 4)));
+//		parent1.addConnectionGene(new Connection(2, 5, 1f, true, Innovation.getInnovationConnection(2, 5)));
+//		parent1.addConnectionGene(new Connection(5, 4, 1f, true, Innovation.getInnovationConnection(5, 4)));
+//		parent1.addConnectionGene(new Connection(1, 5, 1f, true, Innovation.getInnovationConnection(1, 5)));
+//		return parent1;
+//
+//	}
+//	public static Genome Parent2(){
+//		Genome parent2 = new Genome();
+//		for (int i = 0; i < 3; i++) {
+//			parent2.addNodeGene(new Node(TYPE.INPUT, i+1));
+//		}
+//		parent2.addNodeGene(new Node(TYPE.OUTPUT, 4));
+//		parent2.addNodeGene(new Node(TYPE.HIDDEN, 5));
+//		parent2.addNodeGene(new Node(TYPE.HIDDEN, Innovation.getInnovationNode()));
+//
+//		parent2.addConnectionGene(new Connection(1, 4, 1f, true, Innovation.getInnovationConnection(1, 4)));
+//		parent2.addConnectionGene(new Connection(2, 4, 1f, false, Innovation.getInnovationConnection(2, 4)));
+//		parent2.addConnectionGene(new Connection(3, 4, 1f, true, Innovation.getInnovationConnection(3, 4)));
+//		parent2.addConnectionGene(new Connection(2, 5, 1f, true, Innovation.getInnovationConnection(2, 5)));
+//		parent2.addConnectionGene(new Connection(5, 4, 1f, false, Innovation.getInnovationConnection(5, 4)));
+//		parent2.addConnectionGene(new Connection(5, 6, 1f, true, Innovation.getInnovationConnection(5, 6)));
+//		parent2.addConnectionGene(new Connection(6, 4, 1f, true, Innovation.getInnovationConnection(6, 4)));
+//		parent2.addConnectionGene(new Connection(3, 5, 1f, true, Innovation.getInnovationConnection(3, 5)));
+//		parent2.addConnectionGene(new Connection(1, 6, 1f, true, Innovation.getInnovationConnection(1, 6)));
+//		return parent2;
+//		
+//	}
 
 	public static void show(Genome g, String name) {
 		int yposInput = 20;

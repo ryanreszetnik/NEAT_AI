@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Node {
-	
-	
-	
+
 	enum TYPE{
 		INPUT,
 		HIDDEN,
@@ -29,6 +27,8 @@ public class Node {
 		return id;
 	}
 	
+	
+	/*
 	public static ArrayList<Integer> futureNodes(HashMap<Integer,Connection> connections, int currNode){
 		ArrayList<Integer> nodeVals = new ArrayList<>();
 		for(Connection conn: connections.values()){
@@ -39,7 +39,7 @@ public class Node {
 		}
 		return nodeVals;
 	}
-	
+	*/
 	public static ArrayList<Integer> mergeArrayLists(ArrayList<Integer> a, ArrayList<Integer> b){
 		ArrayList<Integer> bcopy = new ArrayList<>(b);
 		bcopy.removeAll(a);
