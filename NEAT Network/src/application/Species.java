@@ -23,7 +23,9 @@ public class Species {
 		sumAdjustedFit+=fit;
 	}
 	public void reset(Random r){
-		mascot = weightedRandomGenome();
+//		mascot = weightedRandomGenome();
+		int temp = r.nextInt(members.size());
+		mascot = members.get(temp);
 		members.clear();
 		sumAdjustedFit = 0;
 	}

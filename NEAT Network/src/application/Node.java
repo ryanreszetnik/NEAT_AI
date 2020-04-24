@@ -13,6 +13,8 @@ public class Node {
 	}
 	private TYPE type;
 	private int id;
+	private float bias = 1f;
+	private float biasWeight;
 	
 	public Node(TYPE type, int innov){
 		this.type=type;
@@ -28,18 +30,18 @@ public class Node {
 	}
 	
 	
-	/*
-	public static ArrayList<Integer> futureNodes(HashMap<Integer,Connection> connections, int currNode){
-		ArrayList<Integer> nodeVals = new ArrayList<>();
-		for(Connection conn: connections.values()){
-			if(conn.getInputNode()==currNode){
-				nodeVals.add(conn.getOutputNode());
-				nodeVals = mergeArrayLists(nodeVals, Node.futureNodes(connections, conn.getOutputNode()));
-			}
-		}
-		return nodeVals;
-	}
-	*/
+	
+//	public static ArrayList<Integer> futureNodes(HashMap<Integer,Connection> connections, int currNode){
+//		ArrayList<Integer> nodeVals = new ArrayList<>();
+//		for(Connection conn: connections.values()){
+//			if(conn.getInputNode()==currNode){
+//				nodeVals.add(conn.getOutputNode());
+//				nodeVals = mergeArrayLists(nodeVals, Node.futureNodes(connections, conn.getOutputNode()));
+//			}
+//		}
+//		return nodeVals;
+//	}
+	
 	public static ArrayList<Integer> mergeArrayLists(ArrayList<Integer> a, ArrayList<Integer> b){
 		ArrayList<Integer> bcopy = new ArrayList<>(b);
 		bcopy.removeAll(a);

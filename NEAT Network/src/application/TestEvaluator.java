@@ -15,10 +15,15 @@ public class TestEvaluator {
 		gene.addConnectionGene(new Connection(1, 3, 0.5f, true,  gene.connectionCount.addToCount()));
 		gene.addConnectionGene(new Connection(2, 3, 0.5f, true,  gene.connectionCount.addToCount()));
 //		System.out.println(gene.innovationGenerator.getInnovationNode());
-		Evaluator eval = new Evaluator(gene, 100, 1f, 1f, 0.4f, 2.5f, 0.5f, 0.1f, 0.1f){
+		Evaluator eval = new Evaluator(gene, 100, 1f, 1f, 0.4f, 2f, 0.5f, 0.1f, 0.1f){
 			@Override
 			protected float evalGenome(Genome g){
-				return (g.getConnectionGenes().values().size());
+				double sum = 0;
+				for(Connection c:g.getConnectionGenes().values()){
+					sum+=c.getWeight();
+				}
+//				System.out.println(sum);
+				return (float) (20/Math.abs(20-sum));
 			}
 		};
 		for(int i = 0; i < 100; i++){

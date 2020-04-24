@@ -89,14 +89,17 @@ public class Genome {
 		for (int i = 0; i < maxAttempts; i++) {
 			int temp = r.nextInt(nodes.size() - 1) + 1;
 			int temp2 = r.nextInt(nodes.size() - 1) + 1;
-			Node a = nodes.get(temp);
-			Node b = nodes.get(temp2);
-
+			Node a = nodes.get(temp);//temp
+			Node b = nodes.get(temp2);//temp2
+			boolean bad = false;
+			if (a.equals(b)) {
+				bad = true;
+			}
 			// System.out.println(a+ " connect to " +b +" from " + temp + " and
 			// "+ temp2 +" within "+nodes.size() );
 			float weight = r.nextFloat() * 2f - 1f;
 			// a --> b
-			boolean bad = false;
+
 			boolean flipped = false;
 			if (a.getType() == Node.TYPE.OUTPUT && b.getType() == Node.TYPE.INPUT) {
 				flipped = true;
@@ -110,12 +113,14 @@ public class Genome {
 			} else if (a.getType() == Node.TYPE.OUTPUT && b.getType() == Node.TYPE.OUTPUT) {
 				// bad
 				bad = true;
-			} /*
-				 * else if (a.getType() == Node.TYPE.HIDDEN && b.getType() ==
-				 * Node.TYPE.HIDDEN) { // possibly needs to be reversed if a is
-				 * in the future of b if (Node.futureNodes(connections,
-				 * b.getId()).contains(a.getId())) { flipped = true; } }
-				 */
+			} else if (a.getType() == Node.TYPE.HIDDEN && b.getType() == Node.TYPE.HIDDEN) {
+				// possibly needs to be reversed if a is in future of b
+				if (inFuture(a,b)) {
+//					System.out.println("Flipped");
+					flipped = true;
+				}
+			}
+
 			if (ConnectionExists(a.getId(), b.getId(), connections) == -1 && !bad) {
 				int inn = connectionCount.addToCount();
 				// add connection
@@ -128,6 +133,28 @@ public class Genome {
 		}
 		// System.out.println("Could not make new connection");
 
+	}
+
+	static ArrayList<Integer> future = new ArrayList<>();
+	static HashMap<Integer, Boolean> tested = new HashMap<>();
+
+	public boolean inFuture(Node lookingFor, Node b) {
+		if (lookingFor.equals(b)) {
+			return true;
+		} else {
+			for (Connection c : connections.values()) {
+				if (c.getInputNode() == b.getId()) {
+					if (tested.get(c.getOutputNode()) == null) {
+						tested.put(c.getOutputNode(), true);
+						if (inFuture(lookingFor, nodes.get(c.getOutputNode()))) {
+							return true;
+						}
+					}
+				}
+			}
+
+		}
+		return false;
 	}
 
 	public int ConnectionExists(int nodeA, int nodeB, HashMap<Integer, Connection> connect) {
@@ -269,7 +296,9 @@ public class Genome {
 				matching++;
 				weightDiff += Math
 						.abs(g1.getConnectionGenes().get(i).getWeight() - g2.getConnectionGenes().get(i).getWeight());
-//				System.out.println("Checking: " + g1.getConnectionGenes().get(i).getWeight() +" vs "+ g2.getConnectionGenes().get(i).getWeight() );
+				// System.out.println("Checking: " +
+				// g1.getConnectionGenes().get(i).getWeight() +" vs "+
+				// g2.getConnectionGenes().get(i).getWeight() );
 			} else if (!firstInnNums.contains(i) && maxInn1 > i && secondInnNums.contains(i)) {
 				disjoint++;
 			} else if (!secondInnNums.contains(i) && maxInn2 > i && firstInnNums.contains(i)) {
@@ -284,7 +313,9 @@ public class Genome {
 		weightDiff /= matching;
 		double output = excess * c1 / numOfGenes + disjoint * c2 / numOfGenes + c3 * weightDiff;
 		if (output > 2) {
-//			System.out.println("excess: " + excess + " dis: " + disjoint + " weightDiff: " + weightDiff + " matching: " +matching + "before " + temp);
+			// System.out.println("excess: " + excess + " dis: " + disjoint + "
+			// weightDiff: " + weightDiff + " matching: " +matching + "before "
+			// + temp);
 		}
 		return excess * c1 / numOfGenes + disjoint * c2 / numOfGenes + c3 * weightDiff;
 	}

@@ -19,7 +19,12 @@ public class ShowGenome {
 
 	public static void main(String[] args) {
 //		Genome parent1 = Parent1();
-//		Genome parent2 = Parent2();
+		Genome parent2 = Parent3();
+		show(parent2,"Recurse1");
+		parent2.newRandConnection(new Random(), 20);
+		show(parent2,"Recurse2");
+		
+//		System.out.println(parent2.inFuture(, b));
 //		parent1.mutateWeights(new Random());
 //		show(parent1,"Parent1");
 //		show(parent2,"Parent2");
@@ -32,16 +37,23 @@ public class ShowGenome {
 //		show(parent2,"Parent2");
 	}
 
-//	public static Genome Parent3(){
-//		Genome parent1 = new Genome();
-//		for (int i = 0; i < 2; i++) {
-//			parent1.addNodeGene(new Node(TYPE.INPUT, parent1.innovationGenerator.getInnovationNode()));
-//		}
-//		parent1.addNodeGene(new Node(TYPE.OUTPUT,  parent1.innovationGenerator.getInnovationNode()));
-//		parent1.addConnectionGene(new Connection(1, 3, 1f, true,  parent1.innovationGenerator.getInnovationConnection(1, 3,gene.getConnectionGenes())));
-//		parent1.addConnectionGene(new Connection(2, 3, 1f, true,  parent1.innovationGenerator.getInnovationConnection(2, 3)));
-//		return parent1;
-//	}
+	public static Genome Parent3(){
+		Genome parent1 = new Genome();
+		for (int i = 0; i < 2; i++) {
+			parent1.addNodeGene(new Node(TYPE.INPUT, parent1.nodeCount.addToCount()));//1,2
+		}
+		
+		parent1.addNodeGene(new Node(TYPE.HIDDEN,  parent1.nodeCount.addToCount()));//3
+		parent1.addNodeGene(new Node(TYPE.HIDDEN,  parent1.nodeCount.addToCount()));//4
+		parent1.addNodeGene(new Node(TYPE.HIDDEN,  parent1.nodeCount.addToCount()));//5
+		parent1.addNodeGene(new Node(TYPE.OUTPUT,  parent1.nodeCount.addToCount()));//6
+		parent1.addConnectionGene(new Connection(1, 3, 1f, true, parent1.connectionCount.addToCount()));
+		parent1.addConnectionGene(new Connection(2, 3, 1f, true,   parent1.connectionCount.addToCount()));
+		parent1.addConnectionGene(new Connection(3, 4, 1f, true,   parent1.connectionCount.addToCount()));
+		parent1.addConnectionGene(new Connection(4, 5, 1f, true,   parent1.connectionCount.addToCount()));
+		parent1.addConnectionGene(new Connection(5, 6, 1f, true,   parent1.connectionCount.addToCount()));
+		return parent1;
+	}
 	
 //	public static Genome Parent1() {
 //		Genome parent1 = new Genome();
@@ -113,6 +125,7 @@ public class ShowGenome {
 			gr.setFont(new Font("Arial Black", Font.PLAIN, 20));
 			gr.drawString(n.getId() + "", xpos + 15, ypos + 25);
 		}
+		double counter = 0;
 		for (Connection c : g.getConnectionGenes().values()) {
 			int x1 = nodePos[c.getInputNode()-1][0];
 			int y1 = nodePos[c.getInputNode()-1][1];
@@ -123,10 +136,12 @@ public class ShowGenome {
 			}else{
 				gr.setColor(Color.RED);
 			}
-			gr.setFont(new Font("Arial Black", Font.PLAIN, 10));
-			gr.drawString(c.getWeight() + " " + c.getInnovation(), (x1+x2)/2, (y1+y2)/2);
+			gr.setFont(new Font("Arial Black", Font.PLAIN, 15));
+			gr.drawString(Math.round(c.getWeight()*100)/100.0 + "", (x1+x2)/2, (y1+y2)/2);
 			gr.drawLine(x1 + 40, y1 + 20, x2, y2 + 20);
+			counter += c.getWeight();
 		}
+		gr.drawString("Final Sum: "+ counter, 20, 500);
 
 		File outputfile = new File(name);
 		try {

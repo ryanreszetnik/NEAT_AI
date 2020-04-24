@@ -83,14 +83,14 @@ public abstract class Evaluator {
 		}
 		// remove empty species
 		int counter = 0;
-		ArrayList<Integer> removing = new ArrayList<>();
+//		ArrayList<Integer> removing = new ArrayList<>();
 		for (int i = species.size() - 1; i >= 0; i--) {
 			if (species.get(i).members.size() == 0) {
 				species.remove(i);
 
 				counter++;
 			}
-			removing.add(species.get(i).members.size());
+//			removing.add(species.get(i).members.size());
 
 		}
 		// System.out.println("added: " + newCounter + " removed: "+counter +" "
@@ -115,11 +115,11 @@ public abstract class Evaluator {
 		}
 
 		// put best genomes from each species into next gen (not sure if this is actually good)
-/*
+
 		for (Species s : species) {
 			nextGenomes.add(s.bestGenome());
 		}
-*/
+
 		// Breed
 		// System.out.println(species.size());
 		while (nextGenomes.size() < popSize) {
