@@ -96,8 +96,8 @@ public class Genome {
 		for (int i = 0; i < maxAttempts; i++) {
 			int temp = r.nextInt(nodes.size() - 1) + 1;
 			int temp2 = r.nextInt(nodes.size() - 1) + 1;
-			Node a = nodes.get(temp);//temp
-			Node b = nodes.get(temp2);//temp2
+			Node a = nodes.get(temp);// temp
+			Node b = nodes.get(temp2);// temp2
 			boolean bad = false;
 			if (a.equals(b)) {
 				bad = true;
@@ -122,11 +122,11 @@ public class Genome {
 				bad = true;
 			} else if (a.getType() == Node.TYPE.HIDDEN && b.getType() == Node.TYPE.HIDDEN) {
 				// possibly needs to be reversed if a is in future of b
-				if (inFuture(a,b)) {
-//					System.out.println("Flipped");
+				if (inFuture(a, b)) {
+					// System.out.println("Flipped");
 					flipped = true;
 				}
-			}
+			} 
 
 			if (ConnectionExists(a.getId(), b.getId(), connections) == -1 && !bad) {
 				int inn = connectionCount.addToCount();
@@ -176,13 +176,16 @@ public class Genome {
 	}
 
 	public void addNodeMutation(Random r) {
+		if(connections.size()==0){
+			return;
+		}
 		int conn = r.nextInt(connections.size()) + 1;
 		Connection c = connections.get(conn);
 		int input = c.getInputNode();
 		int output = c.getOutputNode();
 		c.disable();
 		int innov = nodeCount.addToCount();
-		Node newNode = new Node(TYPE.HIDDEN, innov,r.nextFloat());
+		Node newNode = new Node(TYPE.HIDDEN, innov, r.nextFloat());
 		// System.out.println("Go to" + innov + "size: " + nodes.size() + " id1:
 		// " + input + " id2:" + newNode.getId()
 		// + " id3: " + output);
@@ -291,39 +294,53 @@ public class Genome {
 				excess++;
 			}
 		}
+
 		firstInnNums.clear();
 		secondInnNums.clear();
 		firstInnNums.addAll(g1.getConnectionGenes().keySet());
 		secondInnNums.addAll(g2.getConnectionGenes().keySet());
-		maxInn1 = Collections.max(firstInnNums);
-		maxInn2 = Collections.max(secondInnNums);
-		maxInnNum = Math.max(maxInn1, maxInn2);
-		for (int i = 0; i <= maxInnNum; i++) {
-			if (firstInnNums.contains(i) && secondInnNums.contains(i)) {
-				matching++;
-				weightDiff += Math
-						.abs(g1.getConnectionGenes().get(i).getWeight() - g2.getConnectionGenes().get(i).getWeight());
-				// System.out.println("Checking: " +
-				// g1.getConnectionGenes().get(i).getWeight() +" vs "+
-				// g2.getConnectionGenes().get(i).getWeight() );
-			} else if (!firstInnNums.contains(i) && maxInn1 > i && secondInnNums.contains(i)) {
-				disjoint++;
-			} else if (!secondInnNums.contains(i) && maxInn2 > i && firstInnNums.contains(i)) {
-				disjoint++;
-			} else if (!firstInnNums.contains(i) && maxInn1 < i && secondInnNums.contains(i)) {
-				excess++;
-			} else if (!secondInnNums.contains(i) && maxInn2 < i && firstInnNums.contains(i)) {
-				excess++;
+
+		if (firstInnNums.size() > 0 && secondInnNums.size() > 0) {
+			maxInn1 = Collections.max(firstInnNums);
+			maxInn2 = Collections.max(secondInnNums);
+			maxInnNum = Math.max(maxInn1, maxInn2);
+			for (int i = 0; i <= maxInnNum; i++) {
+				if (firstInnNums.contains(i) && secondInnNums.contains(i)) {
+					matching++;
+					weightDiff += Math.abs(
+							g1.getConnectionGenes().get(i).getWeight() - g2.getConnectionGenes().get(i).getWeight());
+					// System.out.println("Checking: " +
+					// g1.getConnectionGenes().get(i).getWeight() +" vs "+
+					// g2.getConnectionGenes().get(i).getWeight() );
+				} else if (!firstInnNums.contains(i) && maxInn1 > i && secondInnNums.contains(i)) {
+					disjoint++;
+				} else if (!secondInnNums.contains(i) && maxInn2 > i && firstInnNums.contains(i)) {
+					disjoint++;
+				} else if (!firstInnNums.contains(i) && maxInn1 < i && secondInnNums.contains(i)) {
+					excess++;
+				} else if (!secondInnNums.contains(i) && maxInn2 < i && firstInnNums.contains(i)) {
+					excess++;
+				}
 			}
+		} else if (firstInnNums.size() > 0 && secondInnNums.size() == 0) {
+			excess += firstInnNums.size();
+		} else if (firstInnNums.size() == 0 && secondInnNums.size() > 0) {
+			excess += secondInnNums.size();
 		}
 		float temp = weightDiff;
-		weightDiff /= matching;
-		double output = excess * c1 / numOfGenes + disjoint * c2 / numOfGenes + c3 * weightDiff;
-		if (output > 2) {
-			// System.out.println("excess: " + excess + " dis: " + disjoint + "
-			// weightDiff: " + weightDiff + " matching: " +matching + "before "
-			// + temp);
+		if (matching > 0) {
+			weightDiff /= matching;
 		}
+		// double output = excess * c1 / numOfGenes + disjoint * c2 / numOfGenes
+		// + c3 * weightDiff;
+		// if (output > 2) {
+		// // System.out.println("excess: " + excess + " dis: " + disjoint + "
+		// // weightDiff: " + weightDiff + " matching: " +matching + "before "
+		// // + temp);
+		// }
+//		System.out.println(
+//				"excess: " + excess + " dis: " + disjoint + " weightDiff: " + weightDiff + " matching: " + matching);
+
 		return excess * c1 / numOfGenes + disjoint * c2 / numOfGenes + c3 * weightDiff;
 	}
 

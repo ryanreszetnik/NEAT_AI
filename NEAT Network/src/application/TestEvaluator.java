@@ -11,12 +11,13 @@ public class TestEvaluator {
 
 		Random r = new Random();
 		Genome gene = new Genome();
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 5; i++) {
 			gene.addNodeGene(new Node(TYPE.INPUT, gene.nodeCount.addToCount(),r.nextFloat()));
 		}
 		gene.addNodeGene(new Node(TYPE.OUTPUT,  gene.nodeCount.addToCount(),r.nextFloat()));
-		gene.addConnectionGene(new Connection(1, 3, 0.5f, true,  gene.connectionCount.addToCount()));
-		gene.addConnectionGene(new Connection(2, 3, 0.5f, true,  gene.connectionCount.addToCount()));
+		gene.addNodeGene(new Node(TYPE.OUTPUT,  gene.nodeCount.addToCount(),r.nextFloat()));
+//		gene.addConnectionGene(new Connection(1, 3, 0.5f, true,  gene.connectionCount.addToCount()));
+//		gene.addConnectionGene(new Connection(2, 3, 0.5f, true,  gene.connectionCount.addToCount()));
 //		System.out.println(gene.innovationGenerator.getInnovationNode());
 		Evaluator eval = new Evaluator(gene, 100, 1f, 1f, 0.4f, 2f, 0.5f, 0.1f, 0.1f){
 			@Override

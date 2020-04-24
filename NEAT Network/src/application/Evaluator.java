@@ -138,6 +138,7 @@ public abstract class Evaluator {
 			}
 			if (r.nextFloat() < addConnectionRate) {
 				child.newRandConnection(r, maxConnectionAttempts);
+//				System.out.println("Adding Connection");
 			}
 			if (r.nextFloat() < addNodeRate) {
 
